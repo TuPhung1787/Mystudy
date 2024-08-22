@@ -65,3 +65,51 @@
 + Step 6.4: `http://localhost:3000/login` need 3 things for login, userName, password (otherId received when login auth/google or auth/facebook), and OTP (smsPhone/email/2FA by Microsoft or Google from STEP 7:) `phone need to check again`
 + Step 7: 2FA by Microsoft or Google - Function to generate OTP Auth URL
   + 1st time after login we need to use Application to scan QR code 
+
+### How to move file between version (commit a vs commit b), git log.
+
++ ***APPROACH 1***:
+  + Step 1: `git branch` to get 2 branch name
+    + `p-hmm6286/chore/reset-password`
+    + `HEAD .... a9a1f08`
+  + Step 2: `git checkout p-hmm6286/chore/reset-password` ==> branch would like to update.
+  + Step 3: `git merge a9a1f08` --> merge the branch HEAD (a9a1f08) to the branch (p-hmm6286/chore/reset-password)
+  + Step 4: `git rebase a9a1f08` --> resolve the conflict
+  + Step 5: `git status` ---> verify again the Updated files
+  + Step 6: `git commit -m "..." --no-verify` --> commit the files change
+  + Step 7: `git push -u origin p-hmm6286/chore/reset-password`
+
++ APPROACH 2: **need to verify again**.
+  + Step 1: `git branch` to get 2 branch name
+    + `p-hmm6286/chore/reset-password`
+    + `HEAD .... a9a1f08`
+  + Step 2: Check the file diff 2 branches (file name at the path `shared/utils/index.ts`)
+    + `git diff a9a1f08 p-hmm6286/chore/reset-password -- shared/utils/index.ts`
+  + Step 3: Check Out the Old Version of the File
+    + `git checkout a9a1f08 -- shared/utils/index.ts`
+  + Step 4: Verify the file: check content of the file before update.
+    + `cat shared/utils/index.ts`
+  + Step 5: Stage the File for Commit
+    + `git add shared/utils/index.ts`
+  + Step 6: Commit the Change
+    + `git commit -m "Reverted shared/utils/index.ts to the version from commit a9a1f08"`
+  + Step 7: Push the Changes
+    + `git push -u origin p-hmm6286/chore/reset-password`
+
+### How to synchronize Submodule (packages) vs Main Module (hnv-fe)
+
+Current path: at /hnv-fe
+
++ Step 1: `cd packages`
++ Step 2: `git checkout p-hmm6286/chore/reset-password`
++ Step 3: `git status`
++ Step 4: `git add .` or `git add files`
++ Step 5: `git commit -m "content of your commits" --no-verify`
++ Step 6: `git push -u origin p-hmm6286/chore/reset-password` ==> go to github of hnv-fe-packages (Submodule's repos) to create PR.
++ Step 7: `cd ../`
++ Step 8: `git checkout hmm6286/chore/reset-password`
++ Step 9: `git status`
++ Step 10: `git add .` or `git add files`
++ Step 11: `git commit -m "content of your commits" --no-verify`
++ Step 12: `git push -u origin hmm6286/chore/reset-password` ==> go to github of hnv-fe (Main module's repos) to create PR.
++ Step 13: `git submodule update` --> **update the latest commit** This updates the submodule reference in the main module to the **latest** commit on the submodule branch (p-hmm6286/chore/reset-password). This ensures the main module is pointing to the latest state of the submodule after your changes.
